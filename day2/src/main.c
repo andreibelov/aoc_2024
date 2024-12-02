@@ -18,6 +18,8 @@
 #endif
 
 #include <uthash.h>
+#include <stdbool.h>
+
 typedef struct
 {
 	long key;
@@ -28,11 +30,6 @@ typedef struct
 #define MAX_LIST_SIZE 1024
 
 int parse_input(GList **numbers_list);
-
-int part2(void)
-{
-	return (0);
-}
 
 int is_valid(Array *arr)
 {
@@ -75,13 +72,116 @@ int is_valid(Array *arr)
 
 void print_tab(gpointer data, gpointer user_data)
 {
-
 	long *acc = user_data;
 
 	Array *arr = data;
 	ft_print_int_tab(arr->arr, arr->size, NULL);
 
 	if (is_valid(arr))
+	{
+		puts("valid\n");
+		(*acc)++;
+	}
+	else
+		puts("invalid\n");
+}
+
+bool bad_diff(long diff, int increasing)
+{ return (ABS(diff) > 3) || diff == 0 || (diff < 0 && increasing) || (diff > 0 && !increasing); }
+
+int is_valid_with_problem_dampener(Array *arr)
+{
+	int i = -1;
+	long diff;
+	int curr;
+	int prev;
+	int attempts = 1;
+	int increasing = 0;
+
+	prev = arr->arr[++i];
+	curr = arr->arr[++i];
+
+	diff = curr - prev;
+	printf("%d, %d : %ld\n", prev, curr, diff);
+	if ((ABS(diff) > 3 || diff == 0))
+	{
+		attempts--;
+		puts("spent an attempt");
+		curr = arr->arr[++i];
+		diff = curr - prev;
+		printf("%d, %d : %ld\n", prev, curr, diff);
+		if ((ABS(diff) > 3 || diff == 0))
+		{
+			prev = arr->arr[i - 1];
+			diff = curr - prev;
+			printf("%d, %d : %ld\n", prev, curr, diff);
+			if ((ABS(diff) > 3 || diff == 0))
+				return (0);
+		}
+	}
+	if (diff > 0)
+	{
+		increasing = 1;
+		puts("increasing");
+	}
+	else
+		puts("decreasing");
+	prev = curr;
+
+	while (++i < arr->size)
+	{
+		curr = arr->arr[i];
+		diff = curr - prev;
+		printf("%d, %d : %ld\n", prev, curr, diff);
+		if (bad_diff(diff, increasing))
+		{
+			puts("bad diff");
+			if (attempts > 0)
+			{
+				attempts--;
+				puts("spent an attempt");
+				if (++i < arr->size)
+				{
+					curr = arr->arr[i];
+					diff = curr - prev;
+					printf("%d, %d : %ld\n", prev, curr, diff);
+					if (bad_diff(diff, increasing))
+					{
+						puts("still a bad diff");
+						curr = arr->arr[--i];
+						prev = arr->arr[i - 2];
+						diff = curr - prev;
+						printf("%d, %d : %ld\n", prev, curr, diff);
+						if (bad_diff(diff, increasing))
+						{
+							puts("still a bad diff");
+							return (0);
+						}
+					}
+				}
+				else
+					return (1);
+			}
+			else
+			{
+				puts("no attempts left");
+				return (0);
+			}
+		}
+		prev = curr;
+	}
+
+	return (1);
+}
+
+void problem_dampener(gpointer data, gpointer user_data)
+{
+	long *acc = user_data;
+
+	Array *arr = data;
+	ft_print_int_tab(arr->arr, arr->size, NULL);
+
+	if (is_valid_with_problem_dampener(arr))
 	{
 		puts("valid\n");
 		(*acc)++;
@@ -100,9 +200,19 @@ int part1(void)
 	return ((int )acc);
 }
 
+int part2(void)
+{
+	long acc = 0;
+	GList *numbers_list;
+
+	int listsize = parse_input(&numbers_list);
+	g_list_foreach(numbers_list, problem_dampener, &acc);
+	return ((int )acc);
+}
+
 int main(void)
 {
-	printf("part1: %d\n", part1());
+//	printf("part1: %d\n\n=====================================\n\n", part1());
 	printf("part2: %d\n", part2());
 	return (EX_OK);
 }
