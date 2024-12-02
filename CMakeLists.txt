@@ -12,6 +12,8 @@
 
 cmake_minimum_required(VERSION 3.29)
 
+include_directories(include)
+
 project(aoc_2024 LANGUAGES C)
 
 set(COMMON_LDFLAGS
@@ -45,3 +47,4 @@ set(COMMON_CFLAGS
 )
 
 add_subdirectory(day1)
+add_subdirectory(day2)
