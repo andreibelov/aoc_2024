@@ -18,7 +18,7 @@
 #include "day1.h"
 
 #ifndef INPUT_FILE_NAME
-# define INPUT_FILE_NAME "./resources/input1.txt"
+# define INPUT_FILE_NAME "./resources/input.txt"
 #endif
 
 #include <uthash.h>
@@ -102,7 +102,7 @@ int part1(void )
 	return ((int )acc);
 }
 
-int main(int argc, char **argv)
+int main(void)
 {
 	printf("part1: %d\n", part1());
 	printf("part2: %d\n", part2());

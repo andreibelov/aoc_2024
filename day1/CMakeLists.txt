@@ -23,7 +23,7 @@ set(CMAKE_REQUIRED_LIBRARIES "-lbsd")
 
 include_directories(include)
 
-set(TARGET_EXE_NAME day1)
+set(TARGET_EXE_NAME "${PROJECT_NAME}")
 
 file(GLOB TARGET_HEADERS "src/*.h")
 file(GLOB TARGET_SOURCES "src/*.c")
@@ -42,7 +42,7 @@ target_link_options(${TARGET_EXE_NAME} PRIVATE ${COMMON_LDFLAGS})
 target_link_libraries(${TARGET_EXE_NAME} Threads::Threads PkgConfig::deps)
 
 target_compile_definitions(${TARGET_EXE_NAME} PRIVATE
-        INPUT_FILE_NAME="${CMAKE_CURRENT_SOURCE_DIR}/resources/input1.txt"
+        INPUT_FILE_NAME="${CMAKE_CURRENT_SOURCE_DIR}/resources/input.txt"
 )
 
 set_target_properties(${TARGET_EXE_NAME} PROPERTIES
