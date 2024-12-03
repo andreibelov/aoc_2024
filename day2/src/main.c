@@ -89,89 +89,38 @@ void print_tab(gpointer data, gpointer user_data)
 bool bad_diff(long diff, int increasing)
 { return (ABS(diff) > 3) || diff == 0 || (diff < 0 && increasing) || (diff > 0 && !increasing); }
 
+
+int can_make_valid(Array *arr)
+{
+	int i, j;
+	Array to_test = {
+		.arr = malloc(sizeof(int) * (arr->size - 1)),
+		.size = arr->size - 1
+	};
+
+	i = -1;
+	while (++i < (arr->size))
+	{
+		memcpy(to_test.arr, arr->arr, sizeof(int) * i);
+		int *dest = to_test.arr + i;
+		int *src = arr->arr + i + 1;
+		int to_copy = (arr->size - i - 1);
+		memcpy(dest, src, sizeof(int) * to_copy);
+
+		ft_print_int_tab(to_test.arr, to_test.size, NULL);
+		if (is_valid(&to_test))
+			return (1);
+	}
+	return (0);
+}
+
 int is_valid_with_problem_dampener(Array *arr)
 {
-	int i = -1;
-	long diff;
-	int curr;
-	int prev;
-	int attempts = 1;
-	int increasing = 0;
+	bool safe = 0;
 
-	prev = arr->arr[++i];
-	curr = arr->arr[++i];
-
-	diff = curr - prev;
-	printf("%d, %d : %ld\n", prev, curr, diff);
-	if ((ABS(diff) > 3 || diff == 0))
-	{
-		attempts--;
-		puts("spent an attempt");
-		curr = arr->arr[++i];
-		diff = curr - prev;
-		printf("%d, %d : %ld\n", prev, curr, diff);
-		if ((ABS(diff) > 3 || diff == 0))
-		{
-			prev = arr->arr[i - 1];
-			diff = curr - prev;
-			printf("%d, %d : %ld\n", prev, curr, diff);
-			if ((ABS(diff) > 3 || diff == 0))
-				return (0);
-		}
-	}
-	if (diff > 0)
-	{
-		increasing = 1;
-		puts("increasing");
-	}
-	else
-		puts("decreasing");
-	prev = curr;
-
-	while (++i < arr->size)
-	{
-		curr = arr->arr[i];
-		diff = curr - prev;
-		printf("%d, %d : %ld\n", prev, curr, diff);
-		if (bad_diff(diff, increasing))
-		{
-			puts("bad diff");
-			if (attempts > 0)
-			{
-				attempts--;
-				puts("spent an attempt");
-				if (++i < arr->size)
-				{
-					curr = arr->arr[i];
-					diff = curr - prev;
-					printf("%d, %d : %ld\n", prev, curr, diff);
-					if (bad_diff(diff, increasing))
-					{
-						puts("still a bad diff");
-						curr = arr->arr[--i];
-						prev = arr->arr[i - 2];
-						diff = curr - prev;
-						printf("%d, %d : %ld\n", prev, curr, diff);
-						if (bad_diff(diff, increasing))
-						{
-							puts("still a bad diff");
-							return (0);
-						}
-					}
-				}
-				else
-					return (1);
-			}
-			else
-			{
-				puts("no attempts left");
-				return (0);
-			}
-		}
-		prev = curr;
-	}
-
-	return (1);
+	if (is_valid(arr) || can_make_valid(arr))
+		return (1);
+	return (0);
 }
 
 void problem_dampener(gpointer data, gpointer user_data)
@@ -212,7 +161,7 @@ int part2(void)
 
 int main(void)
 {
-//	printf("part1: %d\n\n=====================================\n\n", part1());
+	printf("part1: %d\n\n=====================================\n\n", part1());
 	printf("part2: %d\n", part2());
 	return (EX_OK);
 }
