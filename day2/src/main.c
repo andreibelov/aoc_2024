@@ -10,24 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdbool.h>
 #include "aoc_2024.h"
 #include "day2.h"
 
-#ifndef INPUT_FILE_NAME
-# define INPUT_FILE_NAME "./resources/input.txt"
-#endif
 
-#include <uthash.h>
-#include <stdbool.h>
-
-typedef struct
-{
-	long key;
-	int value;
-	UT_hash_handle hh;
-}	hash_entry;
-
-#define MAX_LIST_SIZE 1024
 
 int parse_input(GList **numbers_list);
 
