@@ -17,6 +17,21 @@
 # define INPUT_FILE_NAME "./resources/input.txt"
 #endif
 
-int parse_input();
+typedef enum token_type
+{
+	MUL_TOK = 0,
+	DO_TOK,
+	DONT_TOK,
+}	t_token_type;
+
+typedef struct s_token
+{
+	t_token_type 	type;
+	int				n;
+} t_token;
+
+long get_match_p1(const char *lineptr);
+
+GList *tokenize(char *string);
 
 #endif //DAY3_H
