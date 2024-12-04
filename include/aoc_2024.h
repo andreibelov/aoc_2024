@@ -26,6 +26,13 @@
 int intcmp(const int *a, const int *b)
 { return (*a > *b) - (*a < *b); }
 
+typedef struct StringArray
+{
+	char **arr;
+	int size;
+	int current;
+}	StringArray;
+
 typedef struct Array
 {
 	int *arr;
@@ -43,6 +50,23 @@ void ft_print_int_tab(int tab[], size_t size, const char *eol)
 	while (pos < size)
 		printf(", %d", tab[pos++]);
 	printf("]%s", (!eol) ? "\n" : eol);
+}
+
+void ft_print_str_tab(char **tab,  size_t size, const char *separator)
+{
+	size_t pos;
+	const char *sep = " ";
+
+	if (separator)
+		sep = separator;
+
+	pos = 0;
+	printf("[");
+	if (pos < size)
+		printf("\"%s\"", tab[pos++]);
+	while (pos < size)
+		printf(",%s\"%s\"", sep, tab[pos++]);
+	puts("]");
 }
 
 
