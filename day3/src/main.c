@@ -214,7 +214,7 @@ t_token new_mul_tok(const char *search_start, regmatch_t matches[MAX_MATCHES])
 
 GList *tokenize(char *text)
 {
-	const char *pattern = "mul\\(([0-9]{1,3}),([0-9]{1,3})\\)|do()|don't()";
+	const char *pattern = "mul\\(([0-9]{1,3}),([0-9]{1,3})\\)|do\\(\\)|don't\\(\\)";
 	static regex_t regex;
 
 	static t_token tokens[MAX_LIST_SIZE];
