@@ -21,23 +21,12 @@
 #include <limits.h>
 #include <glib.h>
 
+#include "aoc_2024_defs.h"
+
 #define intcmp_f (__compar_fn_t) intcmp
 
 int intcmp(const int *a, const int *b)
 { return (*a > *b) - (*a < *b); }
-
-typedef struct StringArray
-{
-	char **arr;
-	int size;
-	int current;
-}	StringArray;
-
-typedef struct Array
-{
-	int *arr;
-	int size;
-}	Array;
 
 void ft_print_int_tab(int tab[], size_t size, const char *eol)
 {
@@ -68,6 +57,5 @@ void ft_print_str_tab(char **tab,  size_t size, const char *separator)
 		printf(",%s\"%s\"", sep, tab[pos++]);
 	puts("]");
 }
-
 
 #endif //AOC_2024_H

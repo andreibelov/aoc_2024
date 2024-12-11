@@ -28,7 +28,7 @@ set(COMMON_CFLAGS
         -Wno-error=unused-parameter
         -Wno-error=unused-variable
         -Wno-narrowing
-        -O0
+        -O6
         -masm=att
         -fno-exceptions
         -ffunction-sections
@@ -46,7 +46,10 @@ set(COMMON_CFLAGS
         -fsanitize=float-cast-overflow
 )
 
+add_subdirectory(scratch)
 add_subdirectory(day1)
 add_subdirectory(day2)
 add_subdirectory(day3)
 add_subdirectory(day4)
+add_subdirectory(day5)
+add_subdirectory(day6)

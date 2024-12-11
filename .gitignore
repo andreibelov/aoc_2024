@@ -12,6 +12,7 @@
 
 obj/
 build/
+scratch/
 day*/day*
 
 # From https://stackoverflow.com/questions/15606955/:

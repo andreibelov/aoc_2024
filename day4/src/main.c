@@ -19,38 +19,13 @@
 
 #define MAX_STACK_SIZE 100024
 
-GList *read_file()
-{
-	char *lineptr = NULL;
-	GList *input = NULL;
-	size_t n;
-	ssize_t nread;
-
-	FILE *f = fopen(INPUT_FILE_NAME, "r");
-	while ((nread = getline(&lineptr, &n, f)) > 0)
-	{
-		lineptr[nread - 1] = '\0';
-		input = g_list_append(input, strdup(lineptr));
-		*lineptr = '\0';
-	}
-	lineptr = (free(lineptr), NULL);
-	fclose(f);
-	return (input);
-}
-
-
+GList *read_file();
 
 void apply(gpointer data, gpointer user_data)
 {
 	StringArray *strings = user_data;
 	strings->arr[strings->current++] = data;
 }
-
-typedef struct s_pair
-{
-	int x;
-	int y;
-} coord;
 
 int part1()
 {
@@ -60,7 +35,7 @@ int part1()
 
 	GList *input = read_file();
 	int xs = 0;
-	coord xzs[MAX_STACK_SIZE];
+	Point xzs[MAX_STACK_SIZE];
 
 	strings.current = 0;
 	strings.size = (int)g_list_length(input);
@@ -79,7 +54,7 @@ int part1()
 		while(*str)
 		{
 			if (*str == 'X')
-				xzs[xs++] = (coord){.x = strings.current, .y = (int)(str - ptr)};
+				xzs[xs++] = (Point){.x = strings.current, .y = (int)(str - ptr)};
 			str++;
 		}
 		strings.current++;
@@ -90,7 +65,7 @@ int part1()
 	while(xs)
 	{
 		char buff[5];
-		coord X = xzs[--xs];
+		Point X = xzs[--xs];
 
 		bool cond1 = X.y < string_size - 3;
 		bool cond2 = X.x < strings.size - 3;
@@ -244,4 +219,23 @@ int main(void)
 	printf("part1: %d\n\n=====================================\n\n", part1());
 	printf("part2: %d\n", part2());
 	return (EX_OK);
+}
+
+GList *read_file()
+{
+	char *lineptr = NULL;
+	GList *input = NULL;
+	size_t n;
+	ssize_t nread;
+
+	FILE *f = fopen(INPUT_FILE_NAME, "r");
+	while ((nread = getline(&lineptr, &n, f)) > 0)
+	{
+		lineptr[nread - 1] = '\0';
+		input = g_list_append(input, strdup(lineptr));
+		*lineptr = '\0';
+	}
+	lineptr = (free(lineptr), NULL);
+	fclose(f);
+	return (input);
 }
