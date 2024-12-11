@@ -27,6 +27,13 @@ typedef struct Array
 	int ss;
 }	Array;
 
+typedef struct TwoDArray
+{
+	Array *arrays;
+	int size;
+	int curr;
+}	TwoDArray;
+
 typedef struct Point
 {
 	int x, y;

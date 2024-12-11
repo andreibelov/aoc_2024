@@ -13,4 +13,19 @@
 #ifndef DAY5_H
 #define DAY5_H
 
+#include <uthash.h>
+typedef struct he
+{
+	int key;
+	int idx;
+	UT_hash_handle hh;
+}	Node;
+
+typedef struct NodeArray
+{
+	Node *arr;
+	int size;
+	int ss;
+}	NodeArray;
+
 #endif //DAY5_H

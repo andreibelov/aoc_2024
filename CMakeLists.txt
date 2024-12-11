@@ -28,7 +28,7 @@ set(COMMON_CFLAGS
         -Wno-error=unused-parameter
         -Wno-error=unused-variable
         -Wno-narrowing
-        -O6
+        -O0
         -masm=att
         -fno-exceptions
         -ffunction-sections
