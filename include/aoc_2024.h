@@ -41,6 +41,11 @@ void ft_print_int_tab(int tab[], size_t size, const char *eol)
 	printf("]%s", (!eol) ? "\n" : eol);
 }
 
+void ft_println_int_array(Array arr)
+{
+	ft_print_int_tab(arr.arr, arr.size, "\n");
+}
+
 void ft_print_str_tab(char **tab,  size_t size, const char *separator)
 {
 	size_t pos;

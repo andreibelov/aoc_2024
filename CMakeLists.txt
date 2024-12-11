@@ -46,10 +46,10 @@ set(COMMON_CFLAGS
         -fsanitize=float-cast-overflow
 )
 
-add_subdirectory(scratch)
 add_subdirectory(day1)
 add_subdirectory(day2)
 add_subdirectory(day3)
 add_subdirectory(day4)
 add_subdirectory(day5)
 add_subdirectory(day6)
+add_subdirectory(day7)
