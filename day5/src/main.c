@@ -108,11 +108,11 @@ void place_static(NodeArray *np, Node **order, Point p)
 void append_updates(char *str, t_info *info)
 {
 	char		*save_ptr;
-	static Node	pool[1024];
+	static Node	pool[10024];
 
 	static NodeArray np = {
 		.arr = pool,
-		.size = 1024,
+		.size = 10024,
 		.ss = 0
 	};
 
@@ -132,8 +132,6 @@ void append_updates(char *str, t_info *info)
 
 	arr->size = arr->ss;
 	arr->ss = 0;
-
-	ft_print_int_tab(arr->arr, arr->size, "\n");
 
 	Node **order = &info->order[*curr];
 
@@ -240,8 +238,44 @@ int part1(t_info *info)
 
 int reorder(t_info *info, int idx)
 {
+	PointArray *rules = &info->rules;
+	Node **hmap = &info->order[idx];
 
-	return (0);
+	int solved = false;
+	while(!solved)
+	{
+		rules->ss = 0;
+		solved = true;
+		while(rules->ss < rules->size)
+		{
+			Node *left;
+			Node *right;
+			Point rule = rules->arr[rules->ss++];
+			if (!(left = get(hmap, rule.x))) continue;
+			if (!(right = get(hmap, rule.y))) continue;
+			if (left->idx > right->idx)
+			{
+				solved = false;
+				Point tmp = (Point){.x = right->idx, left->idx};
+				place(hmap, (Point) {.x = rule.x, tmp.x});
+				place(hmap, (Point) {.x = rule.y, tmp.y});
+			}
+		}
+	}
+
+	int pos = (int)(HASH_COUNT(*hmap) / 2);
+	int to_return = -1;
+
+	Node *iter = NULL, *tmp = NULL;
+	HASH_ITER(hh, *hmap, iter, tmp)
+	{
+		if (iter->idx == pos)
+		{
+			to_return = iter->key;
+			break;
+		}
+	}
+	return (to_return);
 }
 
 int part2(t_info *info)
@@ -252,12 +286,13 @@ int part2(t_info *info)
 	{
 		int middle = 0;
 		int idx = info->updates.curr++;
+		Array a = info->updates.arrays[idx];
 		if (!is_valid_sequence(info, idx, &middle))
 		{
 			middle = reorder(info, idx);
 			acc += middle;
 		}
-
+		(void )a;
 	}
 	return ((int)acc);
 }

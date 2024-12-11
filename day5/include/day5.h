@@ -21,6 +21,24 @@ typedef struct he
 	UT_hash_handle hh;
 }	Node;
 
+typedef struct UT_hash_handle1 {
+	struct UT_hash_table *tbl;
+	void *prev;                       /* prev element in app order      */
+	void *next;                       /* next element in app order      */
+	struct UT_hash_handle *hh_prev;   /* previous hh in bucket order    */
+	struct UT_hash_handle *hh_next;   /* next hh in bucket order        */
+	int *key;                        /* ptr to enclosing struct's key  */
+	unsigned keylen;                  /* enclosing struct's key len     */
+	unsigned hashv;                   /* result of hash-fcn(key)        */
+} UT_hash_handle1;
+
+typedef struct he1
+{
+	int key;
+	int idx;
+	UT_hash_handle1 hh;
+}	Node1;
+
 typedef struct NodeArray
 {
 	Node *arr;
