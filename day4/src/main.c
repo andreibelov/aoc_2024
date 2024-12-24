@@ -211,7 +211,62 @@ int part1()
 
 int part2()
 {
-	return (0);
+	long acc = 0;
+
+	StringArray strings;
+
+	GList *input = read_file();
+
+	strings.current = 0;
+	strings.size = (int)g_list_length(input);
+	strings.arr = (char **)malloc(strings.size * sizeof(char *));
+	g_list_foreach(input, apply, &strings);
+	g_list_free(input);
+	input = NULL;
+
+	ft_print_str_tab(strings.arr, strings.size, "\n");
+
+	Point curr = (Point){.x = 2, .y = 2};
+	int string_size = (int)strlen(strings.arr[0]);
+
+	while((curr.x < string_size) && (curr.y < strings.size))
+	{
+		char buff1[4];
+		char buff2[4];
+
+		buff1[3] = '\0';
+		buff2[3] = '\0';
+
+		int i = -1;
+		while (++i < 3)
+		{
+			char c = *(strings.arr[curr.y - i] + curr.x - i);
+			buff1[i] = c;
+		}
+		i = -1;
+		while (++i < 3)
+		{
+			char c = *(strings.arr[curr.y - i] + (curr.x - 2) + i);
+			buff2[i] = c;
+		}
+		if ((!strncmp("MAS", buff1, 3) || (!strncmp("SAM", buff1, 3))) &&
+			(!strncmp("MAS", buff2, 3) || (!strncmp("SAM", buff2, 3))))
+			acc++;
+
+		curr.x++;
+		if (curr.x >= string_size)
+		{
+			curr.x = 2;
+			curr.y++;
+		}
+	}
+
+	strings.current = 0;
+	while (strings.current < strings.size)
+		free(strings.arr[strings.current++]);
+	free(strings.arr);
+	strings.size = 0;
+	return ((int)acc);
 }
 
 int main(void)
