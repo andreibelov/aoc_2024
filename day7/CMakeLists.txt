@@ -39,7 +39,7 @@ add_executable(${TARGET_EXE_NAME} ${TARGET_HEADERS} ${TARGET_SOURCES})
 target_include_directories(${TARGET_EXE_NAME} PRIVATE include src)
 target_compile_options(${TARGET_EXE_NAME} PRIVATE ${COMMON_CFLAGS})
 target_link_options(${TARGET_EXE_NAME} PRIVATE ${COMMON_LDFLAGS})
-target_link_libraries(${TARGET_EXE_NAME} Threads::Threads PkgConfig::deps)
+target_link_libraries(${TARGET_EXE_NAME} Threads::Threads PkgConfig::deps -lm)
 
 target_compile_definitions(${TARGET_EXE_NAME} PRIVATE
         INPUT_FILE_NAME="${CMAKE_CURRENT_SOURCE_DIR}/resources/input"

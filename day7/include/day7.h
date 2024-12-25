@@ -18,8 +18,8 @@
 
 typedef struct s_eq
 {
-	int	test_val;
-	Array operands;
+	long long	test_val;
+	Array		operands;
 }	t_eq;
 
 typedef struct s_info
