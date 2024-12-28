@@ -174,11 +174,10 @@ int isReachableCatRec(long long test_number, Array chain, long long value_so_far
 	int left, right, middle = false;
 	Array a = (Array){.arr = &chain.arr[1], .size = chain.size - 1 };
 
+	long long cat = (value_so_far * pow(10, nbrlen(next))) + next;
+	middle = isReachableCatRec(test_number, a,cat);
 	left = isReachableCatRec(test_number, a, value_so_far * next);
 	right = isReachableCatRec(test_number, a, value_so_far + next);
-	long long cat = (value_so_far * pow(10, nbrlen(next))) + next;
-
-	middle = isReachableCatRec(test_number, a,cat);
 
 	return (left || right || middle);
 }
@@ -219,30 +218,4 @@ int main(void)
 	printf("part1: %lld\n=====================================\n", part1(&info));
 	printf("part2: %lld\n", part2(&info));
 	return (EX_OK);
-}
-
-GList *read_file()
-{
-	char *lineptr = NULL;
-	GList *input = NULL;
-	size_t n;
-	ssize_t nread;
-	char buf[1024];
-
-	FILE *f = fopen(INPUT_FILE_NAME, "r");
-	if (!f)
-	{
-		snprintf(buf, 1024, "error opening file %s", INPUT_FILE_NAME);
-		perror(buf);
-		exit(EX_IOERR);
-	}
-	while ((nread = getline(&lineptr, &n, f)) > 0)
-	{
-		lineptr[nread - 1] = '\0';
-		input = g_list_append(input, strdup(lineptr));
-		*lineptr = '\0';
-	}
-	lineptr = (free(lineptr), NULL);
-	fclose(f);
-	return (input);
 }

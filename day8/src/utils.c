@@ -5,15 +5,15 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: abelov <abelov@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 22:26:38 by abelov            #+#    #+#             */
-/*   Updated: 2024/12/10 22:26:38 by abelov           ###   ########.fr       */
+/*   Created: 2024/12/28 00:54:09 by abelov            #+#    #+#             */
+/*   Updated: 2024/12/28 00:54:10 by abelov           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include <glib.h>
-#include <stdio.h>
 #include "aoc_2024_defs.h"
-#include "day6.h"
+#include "day8.h"
 
 Node *get(Node **table, Point point)
 {
@@ -36,35 +36,28 @@ Node *place(Node **table, Point point)
 	return (new_node);
 }
 
-void apply(gpointer data, gpointer user_data)
-{
-	StringArray *strings = user_data;
-	strings->arr[strings->current++] = data;
-}
 
 Point add(Point a, Point b)
 {
 	return (Point){.x = a.x + b.x, .y = a.y + b.y};
 }
 
-void clear(Node **table)
+Point sub(Point p, Point q)
 {
-	Node *iter, *tmp;
-	HASH_ITER(hh, *table, iter, tmp)
-	{
-		HASH_DEL(*table, iter);
-		free(iter);
-	}
-	*table = NULL;
+	return (Point){.x = p.x - q.x, .y = p.y - q.y};
 }
 
-Direction rotate(Direction dir)
+Point mul(Point p, int mul)
 {
-	switch (dir) {
-		case Up: return Right;
-		case Down: return Left;
-		case Left: return Up;
-		case Right: return Down;
-	}
-	return Up; // Default case (should never happen)
+	return (Point){.x = p.x * mul, .y = p.y * mul};
+}
+
+int check_boundaries(Point point, Point max)
+{
+	return ((point.x >= 0 && point.y >= 0) && (point.x < max.x && point.y < max.y));
+}
+
+int manhattan(Point p, Point q)
+{
+	return abs(p.x - q.x) + abs(p.y - q.y);
 }

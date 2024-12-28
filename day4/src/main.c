@@ -275,22 +275,3 @@ int main(void)
 	printf("part2: %d\n", part2());
 	return (EX_OK);
 }
-
-GList *read_file()
-{
-	char *lineptr = NULL;
-	GList *input = NULL;
-	size_t n;
-	ssize_t nread;
-
-	FILE *f = fopen(INPUT_FILE_NAME, "r");
-	while ((nread = getline(&lineptr, &n, f)) > 0)
-	{
-		lineptr[nread - 1] = '\0';
-		input = g_list_append(input, strdup(lineptr));
-		*lineptr = '\0';
-	}
-	lineptr = (free(lineptr), NULL);
-	fclose(f);
-	return (input);
-}

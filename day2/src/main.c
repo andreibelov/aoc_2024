@@ -80,8 +80,9 @@ bool bad_diff(long diff, int increasing)
 int can_make_valid(Array *arr)
 {
 	int i, j;
+	int retval = 0;
 	Array to_test = {
-		.arr = malloc(sizeof(int) * (arr->size - 1)),
+		.arr = (int *)malloc(sizeof(int) * (arr->size - 1)),
 		.size = arr->size - 1
 	};
 
@@ -96,9 +97,14 @@ int can_make_valid(Array *arr)
 
 		ft_print_int_tab(to_test.arr, to_test.size, NULL);
 		if (is_valid(&to_test))
-			return (1);
+		{
+			retval = 1;
+			break;
+		}
 	}
-	return (0);
+	free(arr->arr);
+	free(to_test.arr);
+	return (retval);
 }
 
 int is_valid_with_problem_dampener(Array *arr)

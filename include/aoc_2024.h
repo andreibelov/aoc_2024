@@ -63,4 +63,31 @@ void ft_print_str_tab(char **tab,  size_t size, const char *separator)
 	puts("]");
 }
 
+GList *read_file()
+{
+	char *lineptr = NULL;
+	GList *input = NULL;
+	size_t n;
+	ssize_t nread;
+	char buf[1024];
+
+	FILE *f = fopen(INPUT_FILE_NAME, "r");
+	if (!f)
+	{
+		snprintf(buf, 1024, "error opening file %s", INPUT_FILE_NAME);
+		perror(buf);
+		exit(EX_IOERR);
+	}
+	while ((nread = getline(&lineptr, &n, f)) > 0)
+	{
+		lineptr[nread - 1] = '\0';
+		input = g_list_append(input, strdup(lineptr));
+		*lineptr = '\0';
+	}
+	lineptr = (free(lineptr), NULL);
+	fclose(f);
+	return (input);
+}
+
+
 #endif //AOC_2024_H
