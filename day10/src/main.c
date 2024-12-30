@@ -190,7 +190,6 @@ int part1(t_info *info)
 
 	while (info->trails.ss < info->trails.size)
 		acc += findPaths(info, info->trails.arr[info->trails.ss++]);
-
 	info->trails.ss = 0;
 
 	return ((int)acc);
@@ -202,6 +201,7 @@ int part2(t_info *info)
 
 	while (info->trails.ss < info->trails.size)
 		acc += findAllPaths(info, info->trails.arr[info->trails.ss++]);
+	info->trails.ss = 0;
 
 	return ((int)acc);
 }
