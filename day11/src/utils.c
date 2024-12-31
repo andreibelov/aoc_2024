@@ -12,7 +12,6 @@
 
 #include "day11.h"
 
-
 Node *get(Node *table, Point point)
 {
 	Node *to_find = NULL;
