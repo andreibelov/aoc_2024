@@ -12,14 +12,35 @@
 
 #include <stdio.h>
 #include <sysexits.h>
+#include <stdbool.h>
 #include "day12.h"
 #include "aoc_2024.h"
+
+static const Point	view[4] = {
+	{.x = 0, .y = -1}, // Up
+	{.x = 0, .y =  1}, // Down
+	{.x = -1, .y = 0}, // Left
+	{.x = 1, .y =  0}  // Right
+};
+
+struct direction
+{
+	int Up;
+	int Down;
+	int Left;
+	int Right;
+} Direction = {
+	.Up = Up,
+	.Down = Down,
+	.Left = Left,
+	.Right = Right
+};
 
 void apply(gpointer data, gpointer user_data)
 {
 	StringArray *strings = user_data;
 	strings->arr[strings->current++] = data;
-	printf("%s\n", (char *)data);
+//	printf("%s\n", (char *)data);
 }
 
 void prepare(t_info *info)
@@ -135,6 +156,8 @@ RegionArray *getRegions(t_info *info)
 			region->points.ss = 0;
 		}
 	}
+	regions->size = regions->ss;
+	regions->ss = 0;
 
 	HASH_ITER(hh, visited, iter, tmp)
 	{
@@ -144,7 +167,79 @@ RegionArray *getRegions(t_info *info)
 	return (regions);
 }
 
+int inRegion(Region *region, Point p)
+{
+	int i = -1;
+	while (++i < region->points.size)
+		if (equ(region->points.arr[i], p)) return (true);
+	return (false);
+}
 
+int edge_cmp(const Edge *a, const Edge *b)
+{
+	return (!(equ(a->in, b->in) && equ(a->out, b->out)));
+}
+
+int getSides(Region *region)
+{
+	PointArray pa = region->points;
+
+	GList *perimeter = NULL;
+	Node *visited = NULL, *iter = NULL, *tmp = NULL;
+
+	pa.ss = 0;
+	while (pa.ss < pa.size)
+	{
+		Point vertex =  pa.arr[pa.ss++];
+
+		int i = -1;
+		while(++i < 4)
+		{
+			Point next = add(vertex, view[Up + i]);
+
+			if (get(visited, next)) continue;
+
+			if (!inRegion(region, next))
+			{
+				Edge *edge = (Edge*) malloc(sizeof(Edge));
+				*edge = (Edge) {vertex, next};
+				perimeter = g_list_append(perimeter, edge);
+			}
+			else
+			{
+				place(&visited, next, region->plant);
+			}
+		}
+	}
+
+	GList *it = perimeter;
+	unsigned int perimeter_size = g_list_length(perimeter);
+
+	int redundant = 0;
+
+	while(it)
+	{
+		Edge *eg = it->data;
+
+		int i = -1;
+		while (++i < 2)
+		{
+			Point dir = view[1 + (2 * i)];
+			Edge new_edge = (Edge){ add(eg->in, dir), add(eg->out, dir)};
+			GList *found = g_list_find_custom(perimeter, &new_edge, (GCompareFunc)edge_cmp);
+			if (found) redundant++;
+		}
+		it = it->next;
+	}
+	HASH_ITER(hh, visited, iter, tmp)
+	{
+		HASH_DEL(visited, iter);
+		free(iter);
+	}
+
+	g_list_free_full(perimeter, free);
+	return (int)(perimeter_size - redundant);
+}
 
 int part1(t_info *info)
 {
@@ -163,7 +258,16 @@ int part1(t_info *info)
 
 int part2(t_info *info)
 {
-	return (0);
+	int acc = 0;
+
+	info->regions.ss = 0;
+	while(info->regions.ss < info->regions.size)
+	{
+		Region *region = &info->regions.arr[info->regions.ss++];
+		acc += region->area * getSides(region);
+	}
+
+	return (acc);
 }
 
 int main(void)

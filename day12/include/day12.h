@@ -30,8 +30,6 @@ typedef enum Dir
 	Right
 } Dir;
 
-
-
 typedef struct he
 {
 	Point key;
@@ -60,6 +58,12 @@ typedef struct s_info
 	PointArray points;
 	RegionArray regions;
 }	t_info;
+
+typedef struct Edge
+{
+	Point in;
+	Point out;
+}	Edge;
 
 int equ(Point a, Point b);
 Point add(Point a, Point b);
