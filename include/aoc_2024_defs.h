@@ -15,26 +15,12 @@
 
 #include <stddef.h>
 
-typedef struct StringArray
-{
-	char **arr;
-	int size;
-	int current;
-}	StringArray;
-
 typedef struct Array
 {
 	int *arr;
 	int size;
 	int ss;
 }	Array;
-
-typedef struct TwoDArray
-{
-	Array *arrays;
-	int size;
-	int curr;
-}	TwoDArray;
 
 typedef struct Point
 {
@@ -61,5 +47,21 @@ typedef struct PointArrayPooled
 	int ss;
 	struct PointArrayPooled *_pool;
 }	PointArrayPooled;
+
+typedef struct StringArray
+{
+	char **arr;
+	int size;
+	int current;
+	Point max;
+}	StringArray;
+
+typedef struct TwoDArray
+{
+	Array *arrays;
+	int size;
+	int curr;
+	Point max;
+}	TwoDArray;
 
 #endif //AOC_2024_DEFS_H
