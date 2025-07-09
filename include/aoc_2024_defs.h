@@ -25,13 +25,13 @@ typedef struct Array
 typedef struct Point
 {
 	int x, y;
-} Point;
+}	Point;
 
 typedef struct PointVal
 {
 	Point	coord;
 	int 	val;
-} PointVal;
+}	PointVal;
 
 typedef struct PointArray
 {

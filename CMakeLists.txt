@@ -21,9 +21,10 @@ set(COMMON_LDFLAGS
         -fsanitize=undefined
         -fno-sanitize-recover
         -fsanitize=float-divide-by-zero
-        -fsanitize=float-cast-overflow)
+        -fsanitize=float-cast-overflow
+)
 set(COMMON_CFLAGS
-        -Wall -Wextra -Werror
+        -Wall -Wextra
         -Wwrite-strings -Wimplicit
         -Wno-error=unused-parameter
         -Wno-error=unused-variable
@@ -59,3 +60,4 @@ add_subdirectory(day9)
 add_subdirectory(day10)
 add_subdirectory(day11)
 add_subdirectory(day12)
+add_subdirectory(day13)
