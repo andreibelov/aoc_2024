@@ -17,6 +17,11 @@ include_directories(include)
 project(aoc_2024 LANGUAGES C)
 
 set(COMMON_LDFLAGS
+		-g3 -gdwarf-3
+		-Wl,--gc-sections -Wl,--print-gc-sections
+		-Wl,--unique=.text.*
+		-Wl,--unique=.rodata.*
+		-Wl,--unique=.data.*
         -fsanitize=address
         -fsanitize=undefined
         -fno-sanitize-recover

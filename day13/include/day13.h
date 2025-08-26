@@ -40,7 +40,7 @@ typedef struct s_info
 }	t_info;
 
 int part1(t_info *game);
-int part2(t_info *game);
+long part2(t_info *game);
 
 void prepare(t_info *p_info);
 

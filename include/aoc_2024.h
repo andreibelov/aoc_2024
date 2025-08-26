@@ -78,11 +78,13 @@ GList *read_file()
 		perror(buf);
 		exit(EX_IOERR);
 	}
-	while ((nread = getline(&lineptr, &n, f)) > 0)
+	nread = getline(&lineptr, &n, f);
+	while (nread > 0)
 	{
 		lineptr[nread - 1] = '\0';
 		input = g_list_append(input, strdup(lineptr));
 		*lineptr = '\0';
+		nread = getline(&lineptr, &n, f);
 	}
 	lineptr = (free(lineptr), NULL);
 	fclose(f);

@@ -19,11 +19,16 @@
 
 int main(void)
 {
-	t_info	info = {.costs = (Cost){ .x = 3, .y = 1 }};
+	t_info	info = {
+		.costs = {
+			.x = 3,
+			.y = 1
+		}
+	};
 	prepare(&info);
 
 	printf("part1: %d\n=====================================\n", part1(&info));
-	printf("part2: %d\n", part2(&info));
+	printf("part2: %ld\n", part2(&info));
 	return (EX_OK);
 }
 
@@ -75,23 +80,81 @@ int solve_claw_cramer(const Claw machine, int *nA, int *nB)
 	return 1;
 }
 
+/**
+ * Given a Claw machine and pointers to ints for solution,
+ * solve for nA, nB using Cramer's rule:
+ *   nA * Ax + nB * Bx = Px
+ *   nA * Ay + nB * By = Py
+ * Returns 1 if there is a unique integer solution,
+ * writes solution to *nA, *nB.
+ * Returns 0 otherwise.
+ */
+int solve_claw_cramer2(const Claw machine, long *nA, long *nB)
+{
+	long Ax = machine.A.x;
+	long Ay = machine.A.y;
+	long Bx = machine.B.x;
+	long By = machine.B.y;
+	long Px = machine.prize.x + 10000000000000;
+	long Py = machine.prize.y + 10000000000000;
+
+	long D  = Ax * By - Ay * Bx;      // Main determinant
+	long Da = Px * By - Py * Bx;      // Determinant with Px, Py for A
+	long Db = Ax * Py - Ay * Px;      // Determinant with Px, Py for B
+
+	if (D == 0)
+	{
+		dprintf(STDERR_FILENO, "No unique solution: D=0\n");
+		return 0;
+	}
+	if (Da % D != 0 || Db % D != 0) 	// Check integer divisibility
+	{
+		dprintf(STDERR_FILENO, "No integer solution for this machine\n");
+		return 0;
+	}
+
+	long solA = Da / D;
+	long solB = Db / D;
+
+	if (solA < 0 || solB < 0) 	// Only allow non-negative solutions
+	{
+		dprintf(STDERR_FILENO, "Negative button presses not allowed\n");
+		return 0;
+	}
+
+	*nA = solA;
+	*nB = solB;
+	return 1;
+}
+
 int	part1(t_info *game)
 {
 	int result = 0;
+	Cost costs = game->costs;
 
 	int i = -1;
 	while (++i < game->sp)
 	{
-		Vector	count = {0x00};
-		if (solve_claw_cramer(game->machines[i], &count.x, &count.y))
-			result += 3 * count.x + count.y;
+		int x, y;
+		if (solve_claw_cramer(game->machines[i], &x, &y))
+			result += costs.x * x + y * costs.y;
 	}
 	return (result);
 }
 
-int	part2(t_info *game)
+long	part2(t_info *game)
 {
-	return (0);
+	long result = 0;
+	Cost costs = game->costs;
+
+	int i = -1;
+	while (++i < game->sp)
+	{
+		long x, y;
+		if (solve_claw_cramer2(game->machines[i], &x, &y))
+			result += costs.x * x + y * costs.y;
+	}
+	return (result);
 }
 
 void prepare(t_info *game)
