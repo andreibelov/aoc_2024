@@ -12,8 +12,10 @@
 
 obj/
 build/
+.build/
 scratch/
 day*/day*
+day*/resources/inputReal
 
 # From https://stackoverflow.com/questions/15606955/:
 # If you want to list all the files currently being tracked:
@@ -187,4 +189,4 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-/day13/resources/inputReal
+
