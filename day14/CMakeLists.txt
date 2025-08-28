@@ -21,6 +21,25 @@ project(day14 VERSION 0.1.0 LANGUAGES C CXX ASM)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_REQUIRED_LIBRARIES "-lbsd")
 
+message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
+message(STATUS "System version: ${CMAKE_SYSTEM_VERSION}")
+message(STATUS "Processor: ${CMAKE_SYSTEM_PROCESSOR}")
+message(STATUS "CMAKE_SYSTEM_UNAME: ${CMAKE_SYSTEM_UNAME}")
+message(STATUS "Kernel (target): ${CMAKE_SYSTEM_VERSION}")
+message(STATUS "Kernel (host):   ${CMAKE_HOST_SYSTEM_VERSION}")
+
+#find_path(LINUX_SRC_DIR
+#		NAMES "include/linux/list.h"
+#		PATHS
+#			/usr/src/linux
+#			/usr/src/linux-headers-${CMAKE_SYSTEM_VERSION}
+#			/lib/modules/${CMAKE_SYSTEM_VERSION}/build
+#		NO_DEFAULT_PATH)
+#
+#if(LINUX_SRC_DIR)
+#	include_directories("${LINUX_SRC_DIR}/include")
+#endif()
+
 include_directories(include)
 
 set(TARGET_EXE_NAME "${PROJECT_NAME}")
@@ -37,7 +56,7 @@ target_include_directories(${TARGET_EXE_NAME}
 		PRIVATE "${PROJECT_SOURCE_DIR}/include")
 
 target_compile_definitions(${TARGET_EXE_NAME} PRIVATE
-		INPUT_FILE_NAME="${CMAKE_CURRENT_SOURCE_DIR}/resources/inputReal"
+		INPUT_FILE_NAME="${CMAKE_CURRENT_SOURCE_DIR}/resources/input"
 )
 
 set_target_properties(${TARGET_EXE_NAME} PROPERTIES
