@@ -29,11 +29,13 @@
 # define INPUT_FILE_NAME "./resources/input"
 #endif
 
-//#define AREA_WIDTH 101
-//#define AREA_HEIGHT 103
+#ifndef AREA_WIDTH
+# define AREA_WIDTH 11
+#endif
 
-#define AREA_WIDTH 11
-#define AREA_HEIGHT 7
+#ifndef AREA_HEIGHT
+# define AREA_HEIGHT 7
+#endif
 
 typedef struct Robot
 {

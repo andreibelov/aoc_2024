@@ -32,6 +32,14 @@ int main(void)
 	return (EX_OK);
 }
 
+enum e_quadrant
+{
+	TL = 0,
+	TR,
+	BL,
+	BR
+};
+
 int	part1(t_info *game)
 {
 	int			i;
@@ -68,23 +76,37 @@ int	part1(t_info *game)
 		}
 		fprintf(stdout, "\n");
 	}
+	int quadrants[4] = {0x00};
 	fprintf(stdout, "\n");
 	it.y = -1;
 	while (++it.y < AREA_HEIGHT) {
 		it.x = -1;
 		while (++it.x < AREA_WIDTH) {
 			char c = area[it.y * AREA_WIDTH + it.x];
-			if (it.x == (AREA_WIDTH / 2) || it.y == (AREA_HEIGHT / 2)) {
+			if (it.x == (AREA_WIDTH / 2) || it.y == (AREA_HEIGHT / 2))
 				c = ' ';
-			} else {
-				c = (char)(c == 0 ? '.' : c + '0');
+			else if (c != 0)
+			{
+				if (it.x < (AREA_WIDTH / 2) && it.y < (AREA_HEIGHT / 2))
+					quadrants[TL] += c;
+				else if (it.x > (AREA_WIDTH / 2) && it.y < (AREA_HEIGHT / 2))
+					quadrants[TR] += c;
+				else if (it.x < (AREA_WIDTH / 2) && it.y > (AREA_HEIGHT / 2))
+					quadrants[BL] += c;
+				else
+					quadrants[BR] += c;
+				c = (char) (c + '0');
 			}
+			else
+				c = (char) '.';
 			fprintf(stdout, "%c", c);
 		}
 		fprintf(stdout, "\n");
 	}
-
+	fprintf(stdout, "\n");
 	fflush(stdout);
+
+	result =  quadrants[TL] * quadrants[TR] * quadrants[BL] * quadrants[BR];
 	return (result);
 }
 
@@ -140,7 +162,7 @@ void prepare(t_info *game)
 
 	}
 
-	Robot *rob, *temp;
+	Robot *rob;
 	LIST_FOREACH(rob, &game->robots, link) {
 		printf("Robot p=(%d,%d) v=(%d,%d)\n",
 			   rob->p.x, rob->p.y, rob->v.x, rob->v.y);

@@ -56,7 +56,9 @@ target_include_directories(${TARGET_EXE_NAME}
 		PRIVATE "${PROJECT_SOURCE_DIR}/include")
 
 target_compile_definitions(${TARGET_EXE_NAME} PRIVATE
-		INPUT_FILE_NAME="${CMAKE_CURRENT_SOURCE_DIR}/resources/input"
+		INPUT_FILE_NAME="${CMAKE_CURRENT_SOURCE_DIR}/resources/inputReal"
+		AREA_WIDTH=101
+		AREA_HEIGHT=103
 )
 
 set_target_properties(${TARGET_EXE_NAME} PROPERTIES
