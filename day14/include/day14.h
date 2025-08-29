@@ -23,6 +23,7 @@
 //#include <linux/list.h>
 #include <utlist.h>
 #include <stdlib.h>
+#include <bsd/string.h>
 #include "aoc_2024_defs.h"
 
 #ifndef INPUT_FILE_NAME

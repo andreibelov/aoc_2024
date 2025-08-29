@@ -51,7 +51,7 @@ add_executable(${TARGET_EXE_NAME} ${TARGET_HEADERS} ${TARGET_SOURCES})
 
 target_compile_options(${TARGET_EXE_NAME} PRIVATE ${COMMON_CFLAGS})
 target_link_options(${TARGET_EXE_NAME} PRIVATE ${COMMON_LDFLAGS})
-target_link_libraries(${TARGET_EXE_NAME} PRIVATE ${COMMON_LIBS})
+target_link_libraries(${TARGET_EXE_NAME} PRIVATE ${COMMON_LIBS} bsd)
 target_include_directories(${TARGET_EXE_NAME}
 		PRIVATE "${PROJECT_SOURCE_DIR}/include")
 

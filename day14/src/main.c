@@ -40,6 +40,63 @@ enum e_quadrant
 	BR
 };
 
+void	printArea(const char *area)
+{
+	Point it;
+	it.y = -1;
+	while (++it.y < AREA_HEIGHT) {
+		it.x = -1;
+		while (++it.x < AREA_WIDTH) {
+			char c = area[it.y * AREA_WIDTH + it.x];
+			fprintf(stdout, "%c", c == 0 ? '.' : c + '0');
+		}
+		fprintf(stdout, "\n");
+	}
+}
+
+void	printArea2(const char *area)
+{
+	Point it;
+	it.y = -1;
+	while (++it.y < AREA_HEIGHT) {
+		it.x = -1;
+		while (++it.x < AREA_WIDTH) {
+			char c = area[it.y * AREA_WIDTH + it.x];
+			fprintf(stdout, "%c", c == '.' ? '.' : '#');
+		}
+		fprintf(stdout, "\n");
+	}
+}
+
+void printQuadrants(const char *area, int *quadrants)
+{
+	Point it = { .y = -1};
+	while (++it.y < AREA_HEIGHT) {
+		it.x = -1;
+		while (++it.x < AREA_WIDTH) {
+			char c = area[it.y * AREA_WIDTH + it.x];
+			if (it.x == (AREA_WIDTH / 2) || it.y == (AREA_HEIGHT / 2))
+				c = ' ';
+			else if (c == 0)
+				c = (char) '.';
+			else
+			{
+				if (it.x < (AREA_WIDTH / 2) && it.y < (AREA_HEIGHT / 2))
+					quadrants[TL] += c;
+				else if (it.x > (AREA_WIDTH / 2) && it.y < (AREA_HEIGHT / 2))
+					quadrants[TR] += c;
+				else if (it.x<(AREA_WIDTH / 2) && it.y>(AREA_HEIGHT / 2))
+					quadrants[BL] += c;
+				else
+					quadrants[BR] += c;
+				c = (char) (c + '0');
+			}
+			fprintf(stdout, "%c", c);
+		}
+		fprintf(stdout, "\n");
+	}
+}
+
 int	part1(t_info *game)
 {
 	int			i;
@@ -67,42 +124,12 @@ int	part1(t_info *game)
 		area[robot.p.y * AREA_WIDTH + robot.p.x]++;
 	}
 
-	Point it = { .y = -1};
-	while (++it.y < AREA_HEIGHT) {
-		it.x = -1;
-		while (++it.x < AREA_WIDTH) {
-			char c = area[it.y * AREA_WIDTH + it.x];
-			fprintf(stdout, "%c", c == 0 ? '.' : c + '0');
-		}
-		fprintf(stdout, "\n");
-	}
+	printArea(area);
+
 	int quadrants[4] = {0x00};
 	fprintf(stdout, "\n");
-	it.y = -1;
-	while (++it.y < AREA_HEIGHT) {
-		it.x = -1;
-		while (++it.x < AREA_WIDTH) {
-			char c = area[it.y * AREA_WIDTH + it.x];
-			if (it.x == (AREA_WIDTH / 2) || it.y == (AREA_HEIGHT / 2))
-				c = ' ';
-			else if (c != 0)
-			{
-				if (it.x < (AREA_WIDTH / 2) && it.y < (AREA_HEIGHT / 2))
-					quadrants[TL] += c;
-				else if (it.x > (AREA_WIDTH / 2) && it.y < (AREA_HEIGHT / 2))
-					quadrants[TR] += c;
-				else if (it.x < (AREA_WIDTH / 2) && it.y > (AREA_HEIGHT / 2))
-					quadrants[BL] += c;
-				else
-					quadrants[BR] += c;
-				c = (char) (c + '0');
-			}
-			else
-				c = (char) '.';
-			fprintf(stdout, "%c", c);
-		}
-		fprintf(stdout, "\n");
-	}
+
+	printQuadrants(area, quadrants);
 	fprintf(stdout, "\n");
 	fflush(stdout);
 
@@ -112,10 +139,39 @@ int	part1(t_info *game)
 
 long	part2(t_info *game)
 {
-	long result = 0;
+	int			i;
+	const int	waitTime = 10000;
+	char *const	area = game->area;
+	int			result = 0;
+	Robot		*r, robot;
 
-	(void)game;
-	; // implement part2 here
+	i = 100;
+	while (++i < waitTime) {
+		memset(area, '.', AREA_WIDTH * AREA_HEIGHT);
+		LIST_FOREACH(r, &game->robots, link) {
+			robot = *r;
+			robot.p.x = (robot.p.x + robot.v.x + AREA_WIDTH) % AREA_WIDTH;
+			robot.p.y = (robot.p.y + robot.v.y + AREA_HEIGHT) % AREA_HEIGHT;
+			area[robot.p.y * AREA_WIDTH + robot.p.x] = '#';
+			*r = robot;
+		}
+
+		int j = -1;
+		while (++j < AREA_HEIGHT)
+		{
+			char *str = area + j * AREA_WIDTH;
+			char *string = strnstr(str, "#############", AREA_WIDTH);
+			if (string) {
+				printArea2(area);
+				goto done;
+			}
+		}
+	}
+done:
+	fflush(stdout);
+
+	result = i;
+
 	return (result);
 }
 
